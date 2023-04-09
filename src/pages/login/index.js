@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import api from "./api/axios";
+import api from "../api/axios";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/features/authSlice";
+import { login } from "../../../store/features/authSlice";
 import { useRouter } from "next/router";
 
-const SignIn = () => {
+const index = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,14 +24,14 @@ const SignIn = () => {
     if (validateForm()) {
       try {
         const res = await api.post("/auth/login", { email, password });
-        if (res.data.status === 200) {
-          setIsLoggedIn(true);
-          router.push("/dashboard").then(() => router.reload());
-          dispatch(login(res.data));
+        if (res) {
+          localStorage.setItem("isLoggedIn", true);
+          router.push("/dashboard");
+          dispatch(login(res?.data));
         }
-        setError(res.data.message);
+        setError(res?.data.message);
       } catch (err) {
-        setError(err.response.data.message);
+        setError(err?.response?.data.message);
         console.log(err);
       }
       setLoading(false);
@@ -113,4 +113,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default index;

@@ -26,6 +26,7 @@ export const authSlice = createSlice({
       state.token = null;
       state.isLoggedIn = false;
       clearToken();
+      localStorage.setItem("isLoggedIn", false);
     },
   },
 });

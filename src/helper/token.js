@@ -9,9 +9,16 @@ export function setToken(token) {
     localStorage.setItem("access_token", token);
   }
 }
+
 export function getToken() {
   if (typeof window !== "undefined") {
     const token = localStorage?.getItem("access_token");
     return token || null;
+  }
+}
+
+export function getLoginState() {
+  if (typeof window !== "undefined") {
+    return JSON.parse(localStorage.getItem("isLoggedIn"));
   }
 }

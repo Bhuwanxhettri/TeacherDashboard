@@ -52,6 +52,30 @@ const NavBar = () => {
                     </div>
                   </li>
                 </Link>
+                <Link href="/studentlist">
+                  <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
+                    <div className="flex justify-start gap-4 items-center">
+                      <div>
+                        <AiOutlineAccountBook size={25} />
+                      </div>
+                      <div>
+                        <span className="text-md">Studnet List</span>
+                      </div>
+                    </div>
+                  </li>
+                </Link>
+                <Link href="/attendance">
+                  <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
+                    <div className="flex justify-start gap-4 items-center">
+                      <div>
+                        <AiOutlineAccountBook size={25} />
+                      </div>
+                      <div>
+                        <span className="text-md">Attendance</span>
+                      </div>
+                    </div>
+                  </li>
+                </Link>
 
                 <Link href="/profile">
                   <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
