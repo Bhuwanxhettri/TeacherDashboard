@@ -255,7 +255,7 @@ const Profile = () => {
                         {profile && (
                           <>
                             {
-                              profile?.classes[0].subjectId?.semesterId
+                              profile?.classes[0]?.subjectId?.semesterId
                                 ?.departmentId?.name
                             }
                           </>

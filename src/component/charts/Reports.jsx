@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
-const Reports = () => {
+const Reports = ({height,width}) => {
   const options = {
     chart: {
       id: "gradient-line",
@@ -72,8 +72,8 @@ const Reports = () => {
         options={options}
         series={options.series}
         type="line"
-        height={380}
-        width={630}
+        height={height}
+        width={width}
       />
     </>
   );

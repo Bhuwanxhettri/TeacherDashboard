@@ -11,28 +11,28 @@ const Result = () => {
   const [profile, setProfile] = useState("");
   const [progress, setProgress] = useState(0);
 
-  // const getProfile = () => {
-  //   api.get("/auth/users/me").then((res) => {
-  //     setProfile(res.data);
-  //   });
-  // };
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setProgress((prevProgress) =>
-  //       prevProgress >= 100 ? 0 : prevProgress + 10
-  //     );
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  const getProfile = () => {
+    api.get("/auth/users/me").then((res) => {
+      setProfile(res.data);
+    });
+  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  // const colorClass = progress >= 50 ? "bg-green-500" : "bg-blue-500";
-  // useEffect(() => {
-  //   getProfile();
-  // }, []);
+  const colorClass = progress >= 50 ? "bg-green-500" : "bg-blue-500";
+  useEffect(() => {
+    getProfile();
+  }, []);
   return (
     <>
       <NavBar />
-      {/* <div className="ml-56  px-5">
+      <div className="ml-56  px-5">
         <div className="flex justify-between  items-center">
           <div className="mt-5">
             <h3 className="text-red-600 font-bold text-2xl ">
@@ -187,7 +187,7 @@ const Result = () => {
           </h1>
           <HitMaps />
         </div>
-      </div> */}
+      </div>
     </>
   );
 };

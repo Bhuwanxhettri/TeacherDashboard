@@ -21,6 +21,16 @@ const index = () => {
     }
   };
 
+  const handleAttendanceChange = async(studentid, isPresent) => {
+    const res = await api.post("/attendance", {
+      studentId:studentid,
+      isPresent:isPresent,
+    })
+    if(res){
+      toast('Attendance Done', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+    }
+  };
+
   const today = moment().format("MMMM Do, YYYY");
 
   useEffect(() => {
