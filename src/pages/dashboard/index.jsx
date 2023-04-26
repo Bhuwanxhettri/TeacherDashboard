@@ -9,23 +9,16 @@ import HitMaps from "@/component/charts/HitMaps";
 
 const Result = () => {
   const [profile, setProfile] = useState("");
-  const [progress, setProgress] = useState(0);
-
-  const getProfile = () => {
-    api.get("/auth/users/me").then((res) => {
-      setProfile(res.data);
-    });
+  const getProfile = async () => {
+    try {
+      const res = await api.get("/auth/users/me");
+      if (res) {
+        setProfile(res.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 0 : prevProgress + 10
-      );
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const colorClass = progress >= 50 ? "bg-green-500" : "bg-blue-500";
   useEffect(() => {
     getProfile();
   }, []);
@@ -56,7 +49,7 @@ const Result = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-5 items-center pt-5 ">
+        {/* <div className="flex gap-5 items-center pt-5 ">
           <div className="px-10 py-10 text-white font-bold rounded-md shadow-md bg-gradient-to-r from-zinc-300 to-indigo-600">
             <AiOutlineCheckCircle size={24} className="mt-[-20px] " />
             <p className="text-3xl font-serif font-bold mb-3 pt-4 text-black">
@@ -186,7 +179,7 @@ const Result = () => {
             Daily Activity
           </h1>
           <HitMaps />
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -2,10 +2,13 @@ import NavBar from "@/component/NavBar";
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import { Modal } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, message, Upload } from "antd";
 
 const Profile = () => {
   const [profile, setProfile] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [avatar,setAvatar] = useState("");
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -32,8 +35,18 @@ const Profile = () => {
     email: "",
     phoneNumber: "",
     address: "",
-    avatar: "",
   });
+
+  const props = {
+    name: "file",
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      setAvatar(info.file);
+    },
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -42,11 +55,19 @@ const Profile = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+  const handleSubmit = () => {
+    let formData = new FormData();
+    formData.append("firstName",inputData.firstName);
+    formData.append("lastName", inputData.lastName);
+    formData.append("email",inputData.email);
+    formData.append("phoneNumber",inputData.phoneNumber );
+    formData.append("address", inputData.address);
+    formData.append("avatar",avatar);
 
-    console.log(formData); // Here you can send your form data to your backend API
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+   
   };
   useEffect(() => {
     getProfile();
@@ -150,12 +171,14 @@ const Profile = () => {
                                 <input
                                   value={profile?.firstName}
                                   placeholder="First Name"
+                                  onChange={handleChange}
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
                               </div>
                               <div className="w-[50%]">
                                 <input
                                   value={profile?.lastName}
+                                  onChange={handleChange}
                                   placeholder="Last Name"
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
@@ -163,12 +186,14 @@ const Profile = () => {
                             </div>
                             <input
                               placeholder="Address"
+                              onChange={handleChange}
                               className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                             />
                             <div className="flex items-center gap-4">
                               <div className="w-[50%]">
                                 <input
                                   value={profile?.email}
+                                  onChange={handleChange}
                                   placeholder="Email"
                                   type="email"
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
@@ -177,32 +202,23 @@ const Profile = () => {
                               <div className="w-[50%]">
                                 <input
                                   placeholder="Phone Number"
+                                  onChange={handleChange}
                                   type="number"
                                   value={profile?.phoneNumber}
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
                               </div>
+
+                              <div className="py-8">
+                                <Upload {...props}>
+                                  <Button icon={<UploadOutlined />}>
+                                    Click to Upload
+                                  </Button>
+                                </Upload>
+                              </div>
                             </div>
                           </div>
-                          <div>
-                            {/* component */}
-                            <div className="flex w-full mx-5 my-1 items-center  bg-grey-lighter">
-                              <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-red-200 hover:text-blue-900">
-                                <svg
-                                  className="w-8 h-8"
-                                  fill="currentColor"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-                                </svg>
-                                <span className="mt-2 text-base leading-normal">
-                                  Select your Image
-                                </span>
-                                <input type="file" className="hidden" />
-                              </label>
-                            </div>
-                          </div>
+                        
                         </div>
                       </div>
                     </>

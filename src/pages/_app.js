@@ -8,11 +8,9 @@ import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+  const isLogin = getLoginState();
   useEffect(() => {
-    const isLogin = getLoginState();
-    if (!isLogin) {
-      router.push("/login");
-    } else {
+    if (isLogin) {
       router.push("/dashboard");
     }
   }, []);
