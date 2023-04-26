@@ -4,79 +4,112 @@ import dynamic from "next/dynamic";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
-const Reports = ({height,width}) => {
+const Reports = ({ height, width }) => {
   const options = {
-    chart: {
-      id: "gradient-line",
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-    },
-    stroke: {
-      curve: "smooth",
-    },
-    grid: {
-      borderColor: "#e7e7e7",
-      row: {
-        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-        opacity: 0.5,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    markers: {
-      size: 0,
-      style: "hollow",
-    },
-    xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-    },
-    colors: ["#77B6EA"],
-    fill: {
-      type: "gradient",
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
-        stops: [0, 100],
-      },
-    },
     series: [
       {
-        name: "series-1",
-        data: [30, 40, 45, 50, 49, 60, 70, 91, 125, 100, 90, 80],
+        name: "Inflation",
+        data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2],
       },
     ],
+    options: {
+      chart: {
+        height: 350,
+        type: "bar",
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          dataLabels: {
+            position: "top", // top, center, bottom
+          },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function (val) {
+          return val + "%";
+        },
+        offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#304758"],
+        },
+      },
+
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        position: "top",
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        crosshairs: {
+          fill: {
+            type: "gradient",
+            gradient: {
+              colorFrom: "#D8E3F0",
+              colorTo: "#BED1E6",
+              stops: [0, 100],
+              opacityFrom: 0.4,
+              opacityTo: 0.5,
+            },
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+      yaxis: {
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          show: false,
+          formatter: function (val) {
+            return val + "%";
+          },
+        },
+      },
+      title: {
+        text: "Monthly Inflation in Argentina, 2002",
+        floating: true,
+        offsetY: 330,
+        align: "center",
+        style: {
+          color: "#444",
+        },
+      },
+    },
   };
-
-  return (
-    <>
-      <ReactApexChart
-        options={options}
-        series={options.series}
-        type="line"
-        height={height}
-        width={width}
-      />
-    </>
-  );
-};
-
+return (
+  <>
+    <ReactApexChart
+      options={options}
+      series={options.series}
+      type="bar"
+      height={height}
+      width={width}
+    />
+  </>
+);
+}
 export default Reports;
