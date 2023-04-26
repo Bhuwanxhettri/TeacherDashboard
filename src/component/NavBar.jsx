@@ -17,17 +17,17 @@ const NavBar = () => {
   const disptch = useDispatch();
   return (
     <>
-      <nav className=" bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg w-52 h-screen fixed">
+      <nav className=" bg-[conic-gradient(at_top,_var(--tw-gradient-stops))] from-gray-900 via-gray-100 to-gray-900 shadow-lg w-52 h-screen fixed">
         <div className="">
           <div className="">
             <div>
-              <h2 className="text-white px-5 text-xl font-bold font-serif py-3">
+              <h2 className="text-black px-5 text-xl font-bold font-serif py-3">
                 <span className="font-bold text-black text-2xl">School</span>{" "}
                 <span className="font-bold text-sm"> Sphare</span>
               </h2>
             </div>
             <div className="">
-              <ul className="px-5 text-white gap-4">
+              <ul className="px-5 text-black gap-4">
                 <Link href="/dashboard">
                   <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
                     <div className="flex justify-start gap-4 items-center">
@@ -36,18 +36,6 @@ const NavBar = () => {
                       </div>
                       <div>
                         <span className="text-md">Dashboard</span>
-                      </div>
-                    </div>
-                  </li>
-                </Link>
-                <Link href="/courses">
-                  <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
-                    <div className="flex justify-start gap-4 items-center">
-                      <div>
-                        <AiOutlineAccountBook size={25} />
-                      </div>
-                      <div>
-                        <span className="text-md">Courses</span>
                       </div>
                     </div>
                   </li>
@@ -76,7 +64,6 @@ const NavBar = () => {
                     </div>
                   </li>
                 </Link>
-
                 <Link href="/profile">
                   <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
                     <div className="flex justify-start gap-4 items-center">
@@ -122,7 +109,7 @@ const NavBar = () => {
                   onClick={() => {
                     disptch(logout());
                   }}
-                  href="/"
+                  href="/login"
                 >
                   <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
                     <div className="flex justify-start gap-4 items-center">
