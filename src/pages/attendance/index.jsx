@@ -6,9 +6,11 @@ import { fetcher } from "../api";
 import api from "../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 const index = () => {
   const [students, setStudents] = useState([]);
+
 
   const getStudents = async () => {
     try {
@@ -21,13 +23,30 @@ const index = () => {
     }
   };
 
-  const handleAttendanceChange = async(studentid, isPresent) => {
+  const handleAttendanceChange = async (studentid, isPresent) => {
     const res = await api.post("/attendance", {
-      studentId:studentid,
-      isPresent:isPresent,
-    })
-    if(res){
-      toast('Attendance Done', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+      studentId: studentid,
+      isPresent: isPresent,
+    });
+    if (res) {
+      if (res.data.message === "Already Attedndace added") {
+        toast.error("Already Attedndace added", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast("Attendance Done", {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: "success",
+        });
+      }
     }
   };
 
@@ -44,10 +63,22 @@ const index = () => {
           <NavBar />
         </div>
         <div className="ml-56 mt-5 px-5">
-          <span className="mx-24 text-xl">
-            {today}
-            <ToastContainer />
-          </span>
+          <div className="flex justify-between items-center">
+            <div>
+              <span className=" text-xl">
+                {today}
+                <ToastContainer />
+              </span>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              >
+                <Link href="/attendance/History">Attendance History</Link>
+              </button>
+            </div>
+          </div>
           <table className="min-w-full divide-y divide-gray-200 mx-20">
             <thead className="bg-black">
               <tr>
