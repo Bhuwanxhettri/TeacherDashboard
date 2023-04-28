@@ -19,7 +19,6 @@ const Result = () => {
       console.log(err);
     }
   };
-
   useEffect(() => {
     getProfile();
   }, []);
@@ -73,7 +72,7 @@ const Result = () => {
             </div>
           </div>
           <div className="flex gap-2 my-16   ">
-            <div className=" w-[35%] p-4 border border-gray-200   bg-white shadow-xl">
+            <div className=" w-[45%] p-4 border border-gray-200   bg-white shadow-xl">
               <h2 className="font-bold font-serif text-xl">
                 Studnet Attendance
               </h2>
