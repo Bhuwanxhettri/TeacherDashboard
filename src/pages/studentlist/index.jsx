@@ -7,12 +7,14 @@ const index = () => {
   const [students, setStudent] = useState([]);
   const [countAttendance, setCountAttendance] = useState(0);
   const [studentDetails, setStudentDetails] = useState(null);
-  const [assighnemtReview,setAssignmentReview] = useState(0);
+  const [assighnemtReview, setAssignmentReview] = useState(0);
 
   const studetnDetilas = async (Studentid, id) => {
     try {
       const res = await api.get(`/attendance/reports/${Studentid}`);
-      const resAssignment = await api.get(`/teacher/assignment/reports/${Studentid}`);
+      const resAssignment = await api.get(
+        `/teacher/assignment/reports/${Studentid}`
+      );
       if (res && resAssignment) {
         const present = parseInt(res.data.present);
         setCountAttendance(present);
@@ -41,7 +43,7 @@ const index = () => {
     studentlist();
   }, []);
 
-  useEffect(()=>{},[countAttendance])
+  useEffect(() => {}, [countAttendance]);
 
   return (
     <div>
@@ -103,7 +105,9 @@ const index = () => {
                                   </td>
                                   <td
                                     onClick={() => {
-                                      studetnDetilas(students[id]?.studentId?.id);
+                                      studetnDetilas(
+                                        students[id]?.studentId?.id
+                                      );
                                       setStudentDetails(students[id]);
                                     }}
                                     className="px-6 cursor-pointer hover:underline hover:text-red-600 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"
@@ -132,7 +136,11 @@ const index = () => {
               </div>
             </div>
             <div className="card border w-96  hover:shadow-none shadow-slate-50 shadow-md px-5 rounded-md">
-              <StudentDetails studentDetails={studentDetails} countAttendance={countAttendance} assighnemtReview={assighnemtReview}/>
+              <StudentDetails
+                studentDetails={studentDetails}
+                countAttendance={countAttendance}
+                assighnemtReview={assighnemtReview}
+              />
             </div>
           </div>
         </div>

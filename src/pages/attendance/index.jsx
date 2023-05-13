@@ -11,7 +11,6 @@ import Link from "next/link";
 const index = () => {
   const [students, setStudents] = useState([]);
 
-
   const getStudents = async () => {
     try {
       const res = await fetcher("teacher/class");
@@ -59,10 +58,10 @@ const index = () => {
   return (
     <>
       <div className="flex">
-        <div>
+        <div className="w-[20%]">
           <NavBar />
         </div>
-        <div className="ml-56 mt-5 px-5">
+        <div className=" w-[100%]  mt-5 px-5">
           <div className="flex justify-between items-center">
             <div>
               <span className=" text-xl">
@@ -79,7 +78,7 @@ const index = () => {
               </button>
             </div>
           </div>
-          <table className="min-w-full divide-y divide-gray-200 mx-20">
+          <table className="min-w-full divide-y divide-gray-200 ">
             <thead className="bg-black">
               <tr>
                 <th

@@ -8,7 +8,6 @@ import { Modal } from "antd";
 import { Rate } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, message, Upload } from "antd";
-import axios from "axios";
 import { getToken } from "@/helper/token";
 
 const index = () => {
@@ -21,7 +20,6 @@ const index = () => {
   const [pdf, setPdf] = useState("");
   const [assignment,setAssignment] = useState("");
   
-
   const uploadeAssignment = async () => {
     let formData = new FormData();
     formData.append("note", pdf?.originFileObj);
