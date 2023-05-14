@@ -2,8 +2,12 @@ import React, { useEffect } from "react";
 import { Progress, Space, Rate } from "antd";
 import Reports from "@/component/charts/Reports";
 
-const StudentDetails = ({studentDetails,countAttendance,assighnemtReview}) => {
-   return (
+const StudentDetails = ({
+  studentDetails,
+  countAttendance,
+  assighnemtReview,
+}) => {
+  return (
     <>
       <div className=" relative flex flex-col mx-auto  m-5">
         <img
@@ -15,7 +19,7 @@ const StudentDetails = ({studentDetails,countAttendance,assighnemtReview}) => {
         <div className="profile w-full flex m-3 ml-4 text-white">
           <img
             className="w-28 h-28 p-1 bg-white rounded-full"
-            src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?crop=faces&fit=crop&h=200&w=200&auto=compress&cs=tinysrgb"
+            src={studentDetails?.studentId.avatar}
             alt=""
           />
           <div className="title mt-11 ml-3 font-bold flex flex-col">

@@ -43,17 +43,9 @@ const History = () => {
     }
   };
 
-  //   useEffect(()=>{
-  //     // let today = new Date();
-  //     // let lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-  //     // let startDate = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1);
-  //     // let endDate = new Date(today.getFullYear(), today.getMonth(), 0);
-  //     // sendDateRangeToBackend([startDate,endDate])
-  //   },[])
-
   return (
-    <div>
-      <h2 className="font-bold text-3xl container text-blue-500 py-5 text-center">
+    <div className="bg-slate-100">
+      <h2 className="font-bold text-4xl container text-blue-500 py-5 text-center">
         {" "}
         Attendance Report
       </h2>

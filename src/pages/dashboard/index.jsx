@@ -42,7 +42,7 @@ const Result = () => {
             </div>
             <div className="relative">
               <div className="flex items-center justify-center w-10 h-10 mx-2 overflow-hidden rounded-full">
-                <img src="https://images.unsplash.com/photo-1548544149-4835e62ee5b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" />
+                <img src={profile?.avatar}/>
               </div>
               <div className="absolute bottom-0 right-0 w-4 h-4 mr-1 rounded-full bg-green-500 border-2 border-white" />
             </div>

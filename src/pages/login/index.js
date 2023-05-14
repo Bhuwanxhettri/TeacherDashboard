@@ -49,7 +49,7 @@ const index = () => {
               {error && <p className="text-red-600">{error}</p>}
               <div>
                 <h1 className="text-2xl font-semibold">
-                  Shool Sphare Student Portal System{" "}
+                  Shool Sphare Teacher Portal System{" "}
                 </h1>
               </div>
               <div className="divide-y divide-gray-200">

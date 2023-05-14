@@ -1,29 +1,11 @@
 import NavBar from "@/component/NavBar";
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
-import { Modal } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, message, Upload } from "antd";
-
+import { Avatar, Modal, message } from "antd";
+import AvatarEdit from "./AvatarEdit";
 const Profile = () => {
   const [profile, setProfile] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [avatar,setAvatar] = useState("");
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const getProfile = () => {
-    api.get("/auth/users/me").then((res) => {
-      setProfile(res.data);
-    });
-  };
   const okButtonProps = {
     className: "bg-blue-800", // add a custom class to the button
     size: "large", // set a custom size
@@ -32,46 +14,58 @@ const Profile = () => {
   const [inputData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    password: "",
     phoneNumber: "",
     address: "",
+    avatar: "",
   });
-
-  const props = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      setAvatar(info.file);
-    },
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...inputData,
-      [e.target.name]: e.target.value,
+  const getProfile = () => {
+    api.get("/auth/users/me").then((res) => {
+      setProfile(res.data);
+      const initialdata = {
+        firstName: res.data.firstName,
+        lastName: res.data.lastName,
+        phoneNumber: res.data.phoneNumber,
+        address: res.data.address,
+      };
+      setFormData(initialdata);
     });
   };
 
-  const handleSubmit = () => {
-    let formData = new FormData();
-    formData.append("firstName",inputData.firstName);
-    formData.append("lastName", inputData.lastName);
-    formData.append("email",inputData.email);
-    formData.append("phoneNumber",inputData.phoneNumber );
-    formData.append("address", inputData.address);
-    formData.append("avatar",avatar);
-
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-   
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("firstName", inputData.firstName);
+    formData.append("lastName", inputData.lastName);
+    formData.append("phoneNumber", inputData.phoneNumber);
+    formData.append("address", inputData.address);
+    try {
+      const response = await api.patch("auth/users/me", formData);
+      if (response) {
+        message.success("Update Profile Sucessfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    handleSubmit();
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [isModalOpen]);
   return (
     <>
       <div className="flex">
@@ -92,14 +86,26 @@ const Profile = () => {
                   />
                 </div>
                 <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
-                  {profile?.firstName}
+                  {profile?.firstName} {profile?.lastName}
                 </h1>
 
-                <div>
-                  <img
+                <div className="flex justify-center">
+                  {profile.avatar && (
+                    <AvatarEdit
+                      url={
+                        profile?.avatar ||
+                        "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
+                      }
+                    />
+                  )}
+
+                  {/* <img
                     className="rounded-full w-16 mx-auto"
-                    src={profile?.avatar}
-                  />
+                    src={
+                      profile?.avatar ||
+                      "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
+                    }
+                  /> */}
                 </div>
 
                 <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
@@ -169,15 +175,17 @@ const Profile = () => {
                               <div className="w-[50%]">
                                 {" "}
                                 <input
-                                  value={profile?.firstName}
-                                  placeholder="First Name"
+                                  name="firstName"
+                                  defaultValue={inputData?.firstName}
                                   onChange={handleChange}
+                                  placeholder="First Name"
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
                               </div>
                               <div className="w-[50%]">
                                 <input
-                                  value={profile?.lastName}
+                                  name="lastName"
+                                  defaultValue={inputData?.lastName}
                                   onChange={handleChange}
                                   placeholder="Last Name"
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
@@ -187,38 +195,32 @@ const Profile = () => {
                             <input
                               placeholder="Address"
                               onChange={handleChange}
+                              name="address"
+                              defaultValue={inputData.address}
                               className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                             />
                             <div className="flex items-center gap-4">
                               <div className="w-[50%]">
                                 <input
-                                  value={profile?.email}
+                                  name="password"
                                   onChange={handleChange}
-                                  placeholder="Email"
-                                  type="email"
+                                  placeholder="***********"
+                                  type="password"
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
                               </div>
                               <div className="w-[50%]">
                                 <input
                                   placeholder="Phone Number"
-                                  onChange={handleChange}
+                                  name="phoneNumber"
                                   type="number"
-                                  value={profile?.phoneNumber}
+                                  defaultValue={inputData?.phoneNumber}
+                                  onChange={handleChange}
                                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                                 />
                               </div>
-
-                              <div className="py-8">
-                                <Upload {...props}>
-                                  <Button icon={<UploadOutlined />}>
-                                    Click to Upload
-                                  </Button>
-                                </Upload>
-                              </div>
                             </div>
                           </div>
-                        
                         </div>
                       </div>
                     </>
@@ -227,12 +229,15 @@ const Profile = () => {
                 <div className="text-gray-700">
                   <div className="grid md:grid-cols-2 text-sm">
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">First Name</div>
-                      <div className="px-4 py-2">Jane</div>
+                      <div className="px-4 py-2 font-semibold">Name</div>
+                      <div className="px-4 py-2">
+                        {" "}
+                        {profile?.firstName} {profile?.lastName}
+                      </div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Batch</div>
-                      <div className="px-4 py-2"></div>
+                      <div className="px-4 py-2 font-bold">2074</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Gender</div>
@@ -240,20 +245,19 @@ const Profile = () => {
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
-                      <div className="px-4 py-2">{profile?.phoneNumber}</div>
+                      <div className="px-4 py-2">
+                        {profile?.phoneNumber || "xx-xx-xxx"}
+                      </div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
                         Current Address
                       </div>
-                      <div className="px-4 py-2">{profile.address}</div>
-                    </div>
-                    <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold"></div>
                       <div className="px-4 py-2">
-                        Arlington Heights, IL, Illinois
+                        {profile.address || "Kathmandu"}
                       </div>
                     </div>
+
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
                       <div className=" py-2">
@@ -263,19 +267,6 @@ const Profile = () => {
                         >
                           {profile?.email}
                         </a>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Department</div>
-                      <div className="px-4 py-2">
-                        {profile && (
-                          <>
-                            {
-                              profile?.classes[0]?.subjectId?.semesterId
-                                ?.departmentId?.name
-                            }
-                          </>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -314,15 +305,7 @@ const Profile = () => {
                     <ul className="list-inside space-y-2">
                       <li>
                         <div className="text-teal-600">
-                          Masters Degree in Oxford
-                        </div>
-                        <div className="text-gray-500 text-xs">
-                          March 2020 - Now
-                        </div>
-                      </li>
-                      <li>
-                        <div className="text-teal-600">
-                          Bachelors Degreen in LPU
+                          Master's Degree in oxford school
                         </div>
                         <div className="text-gray-500 text-xs">
                           March 2020 - Now
