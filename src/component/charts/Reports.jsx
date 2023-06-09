@@ -100,16 +100,16 @@ const Reports = ({ height, width }) => {
       },
     },
   };
-return (
-  <>
-    <ReactApexChart
-      options={options}
-      series={options.series}
-      type="bar"
-      height={height}
-      width={width}
-    />
-  </>
-);
-}
+  return (
+    <>
+      <ReactApexChart
+        options={options}
+        series={options.series}
+        type="bar"
+        height={height}
+        width={width}
+      />
+    </>
+  );
+};
 export default Reports;

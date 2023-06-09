@@ -12,10 +12,10 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     if (isLogin) {
       router.push("/dashboard");
-    }else{
-      router.push("/login")
+    } else {
+      router.push("/login");
     }
-  }, []);
+  }, [isLogin]);
   return (
     <>
       <Head>
