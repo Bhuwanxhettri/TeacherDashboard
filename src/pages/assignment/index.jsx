@@ -65,7 +65,7 @@ const index = () => {
       <div className="ml-56 mt-2 bg-slate-50 h-full  w-full  shadow-md rounded-md px-5">
         <ToastContainer />
         <div className="flex justify-between gap-10">
-          <div className=" w-[60%] p-5">
+          <div className=" w-[100%] p-5">
             <h1 className="font-bold text-2xl rounded-md text-white font-serif px-5 my-2 bg-black py-1 ">
               Upload Assignment
             </h1>
@@ -76,6 +76,7 @@ const index = () => {
               }}
               editorLoaded={editorLoaded}
             />
+
             <div class="flex my-2 flex-col py-2 space-y-4">
               <label for="pdf" class="text-gray-700">
                 PDF File:

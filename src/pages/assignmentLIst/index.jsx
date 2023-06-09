@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import NavBar from "@/component/NavBar";
+
 const index = () => {
   const [assignment, setAssignment] = useState(null);
+
   const fetchAssignment = async () => {
     try {
       const res = await api.get("/teacher/assignment");
@@ -21,52 +23,49 @@ const index = () => {
         <div className="w-[20%]">
           <NavBar />
         </div>
-        <div className="w-[100%] px-20">
-          <h1 className="font-bold px-2 text-white rounded-md font-serif text-2xl my-3 bg-black py-1">
+        <div className="w-full px-4">
+          <h1 className="font-bold px-2 text-white rounded-md font-serif text-3xl my-3 bg-blue-800 py-2">
             Assignment List
           </h1>
-          <ul className="flex flex-col py-2 bg-gray-300 p-4">
-            {assignment != null && (
-              <>
-                {assignment?.map((assignmentData) => {
-                  return (
-                    <>
-                      <li className="border-blue-300 flex flex-row mb-2">
-                        <div className="select-none h-[40vh] overflow-y-scroll cursor-pointer bg-white rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                          <div className=" w-[200px] h-[200px] mr-4">
-                            <img src={assignmentData.pdf} />
-                          </div>
-                          <div className="flex-1 pl-1 mr-16">
-                            <div className="font-medium">
-                              {assignmentData.title}
-                            </div>
-                          </div>
-                          <div className="px-20">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: assignmentData.word,
-                              }}
-                            />
-                          </div>
-                          <div className="text-gray-600 text-xs">
-                            {" "}
-                            Deadline{" "}
-                            {new Date(
-                              assignmentData.deadLine
-                            ).toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
-                          </div>
-                        </div>
-                      </li>
-                    </>
-                  );
-                })}
-              </>
-            )}
-          </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {assignment != null &&
+              assignment.map((assignmentData) => (
+                <div
+                  key={assignmentData.id}
+                  className="bg-white rounded-lg overflow-hidden shadow-md"
+                >
+                  <img
+                    src={assignmentData.pdf}
+                    alt={assignmentData.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-xl font-semibold mb-2 truncate text-gray-800">
+                      {assignmentData.title}
+                    </h2>
+
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: assignmentData.word,
+                      }}
+                      className="text-sm text-gray-700 leading-relaxed"
+                    ></div>
+
+                    <div className="text-gray-600 text-sm mt-4">
+                      Deadline:{" "}
+                      {new Date(assignmentData.deadLine).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>
