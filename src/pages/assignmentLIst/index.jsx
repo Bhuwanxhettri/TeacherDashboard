@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import NavBar from "@/component/NavBar";
+import { useRouter } from "next/router";
 
 const index = () => {
   const [assignment, setAssignment] = useState(null);
+
+  const router = useRouter();
+
+  const handleNavigate = (id) => {
+    router.push(`/assignmentLIst/${id}`);
+  };
 
   const fetchAssignment = async () => {
     try {
@@ -23,16 +30,19 @@ const index = () => {
         <div className="w-[20%]">
           <NavBar />
         </div>
-        <div className="w-full px-4">
-          <h1 className="font-bold px-2 text-white rounded-md font-serif text-3xl my-3 bg-blue-800 py-2">
+        <div className="w-full ">
+          <h1 className="font-bold fixed px-20 top-[-12px] w-full  text-white rounded-md font-serif text-3xl my-3 bg-blue-800 py-2">
             Assignment List
           </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid  grid-cols-1 mt-20 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {assignment != null &&
-              assignment.map((assignmentData) => (
+              assignment?.map((assignmentData) => (
                 <div
                   key={assignmentData.id}
-                  className="bg-white rounded-lg overflow-hidden shadow-md"
+                  onClick={() => {
+                    handleNavigate(assignmentData.id);
+                  }}
+                  className="bg-white cursor-pointer  overflow-hidden shadow-md"
                 >
                   <img
                     src={assignmentData.pdf}

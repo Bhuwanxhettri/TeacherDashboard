@@ -12,7 +12,6 @@ export default function CKeditor({ onChange, editorLoaded, name, value }) {
     <>
       {editorLoaded ? (
         <CKEditor
-         
           name={name}
           editor={ClassicEditor}
           data={value}
