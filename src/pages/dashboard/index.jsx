@@ -6,6 +6,7 @@ import { GiTrophyCup } from "react-icons/gi";
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import HitMaps from "@/component/charts/HitMaps";
+import CreateZoomMeeting from "@/component/CreateZoomMeeting";
 
 const Result = () => {
   const [profile, setProfile] = useState("");
@@ -27,6 +28,7 @@ const Result = () => {
       <div className="">
         <NavBar />
         <div className="ml-56  px-5">
+
           <div className="flex justify-between mb-5 items-center">
             <div className="mt-5">
               <h3 className="text-blue-600 font-bold text-3xl ">
@@ -47,6 +49,9 @@ const Result = () => {
               <div className="absolute bottom-0 right-0 w-4 h-4 mr-1 rounded-full bg-green-500 border-2 border-white" />
             </div>
           </div>
+          <div>
+            <CreateZoomMeeting />
+          </div>
           <div className="flex mx-10 justify-between items-center pt-5 ">
             <div className="px-20 py-10 text-red-800 font-bold rounded-bl-3xl  shadow bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-600">
               <AiFillContainer size={24} className="mt-[-20px] " />
@@ -62,6 +67,7 @@ const Result = () => {
               <Reports height={250} width={600} />
             </div>
           </div>
+
           <div className="flex gap-2 my-16   ">
             <div className=" w-[45%] p-4 border border-gray-200   bg-white shadow">
               <h2 className="font-bold font-serif text-xl">
