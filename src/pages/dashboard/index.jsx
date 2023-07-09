@@ -7,9 +7,17 @@ import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import HitMaps from "@/component/charts/HitMaps";
 import CreateZoomMeeting from "@/component/CreateZoomMeeting";
-
+import { FiLink, FiLock } from 'react-icons/fi';
 const Result = () => {
   const [profile, setProfile] = useState("");
+  const [meetingLink, setMeetingLink] = useState();
+
+  const meeting = async () => {
+    const res = await api.get("/all/teacher/meetinglist");
+    if (res) {
+      setMeetingLink(res?.data);
+    }
+  }
   const getProfile = async () => {
     try {
       const res = await api.get("/auth/users/me");
@@ -22,13 +30,13 @@ const Result = () => {
   };
   useEffect(() => {
     getProfile();
+    meeting();
   }, []);
   return (
     <>
       <div className="">
         <NavBar />
         <div className="ml-56  px-5">
-
           <div className="flex justify-between mb-5 items-center">
             <div className="mt-5">
               <h3 className="text-blue-600 font-bold text-3xl ">
@@ -109,6 +117,45 @@ const Result = () => {
                 </div>
               </>
             </div>
+          </div>
+          <div className="my-5 container grid grid-cols-4 gap-5   mx-auto px-4 py-8">
+            {meetingLink?.map((item, id) => {
+              return <>
+                <div key={item.id} className="bg-gradient-to-r from-cyan-500 to-blue-500 col-span-2 rounded-lg shadow-md p-6">
+                  <div className="flex items-center mb-4">
+                    <h2 className="text-3xl  text-white font-bold mr-2">{item.title}</h2>
+                  </div>
+                  <div className="mb-6">
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLink className="mr-2" />
+                      Join URL:
+                    </div>
+                    <a target="_blank" href={item.joinUrl} className="text-white underline">
+                      {item.joinUrl}
+                    </a>
+                  </div>
+                  <div className="mb-6 ">
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLink className="mr-2" />
+                      Start URL:
+                    </div>
+                    <div className="w-full overflow-x-hidden">
+                    <a  target="_blank" href={item.startUrl}>
+                      {item.startUrl}
+                    </a>
+                    </div>
+                   
+                  </div>
+                  <div>
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLock className="mr-2" />
+                      Password:
+                    </div>
+                    <p className="text-gray-900">{item.password}</p>
+                  </div>
+                </div>
+              </>
+            })}
           </div>
         </div>
       </div>
