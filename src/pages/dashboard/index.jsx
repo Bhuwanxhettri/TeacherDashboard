@@ -11,30 +11,40 @@ import { FiLink, FiLock } from 'react-icons/fi';
 const Result = () => {
   const [profile, setProfile] = useState("");
   const [meetingLink, setMeetingLink] = useState();
-
-  const meeting = async () => {
-    const res = await api.get("/all/teacher/meetinglist");
-    if (res) {
-      setMeetingLink(res?.data);
-    }
-  }
-  const getProfile = async () => {
+  const [studentPerformance, setStudentPerformance] = useState([]);
+  const [noticeBoard,setNoticeBoard] = useState([]);
+  const gradientColors = [
+    "from-pink-500 to-purple-500",
+    "from-blue-500 to-indigo-500",
+    "from-green-500 to-teal-500",
+    "from-yellow-500 to-orange-500",
+  ];
+  const fetchData = async () => {
     try {
-      const res = await api.get("/auth/users/me");
-      if (res) {
-        setProfile(res.data);
-      }
+      const [meetingRes, profileRes, studentPerformanceRes] = await Promise.all([
+        api.get("/all/teacher/meetinglist"),
+        api.get("/auth/users/me"),
+        api.get("/stats/average_reports"),
+        // api.get("/department/notification")
+      ]);
+    
+      setMeetingLink(meetingRes?.data);
+      setProfile(profileRes?.data);
+      setStudentPerformance(studentPerformanceRes?.data);
+      // setNoticeBoard(notice?.data);
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
-    getProfile();
-    meeting();
+    fetchData();
   }, []);
+
+
   return (
     <>
-      <div className="">
+      <div className="bg-slate-100">
         <NavBar />
         <div className="ml-56  px-5">
           <div className="flex justify-between mb-5 items-center">
@@ -57,9 +67,7 @@ const Result = () => {
               <div className="absolute bottom-0 right-0 w-4 h-4 mr-1 rounded-full bg-green-500 border-2 border-white" />
             </div>
           </div>
-          <div>
-            <CreateZoomMeeting />
-          </div>
+
           <div className="flex mx-10 justify-between items-center pt-5 ">
             <div className="px-20 py-10 text-red-800 font-bold rounded-bl-3xl  shadow bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-600">
               <AiFillContainer size={24} className="mt-[-20px] " />
@@ -72,11 +80,11 @@ const Result = () => {
               <h2 className="font-bold font-serif text-xl">
                 Studnet Performance
               </h2>
-              <Reports height={250} width={600} />
+              <Reports studentPerformance={studentPerformance} height={250} width={600} />
             </div>
           </div>
 
-          <div className="flex gap-2 my-16   ">
+          <div className="flex gap-2 my-16 ">
             <div className=" w-[45%] p-4 border border-gray-200   bg-white shadow">
               <h2 className="font-bold font-serif text-xl">
                 Studnet Attendance
@@ -118,7 +126,10 @@ const Result = () => {
               </>
             </div>
           </div>
-          <div className="my-5 container grid grid-cols-4 gap-5   mx-auto px-4 py-8">
+          <div>
+            <CreateZoomMeeting />
+          </div>
+          {/* <div className="my-5 container grid grid-cols-4 gap-5   mx-auto px-4 py-8">
             {meetingLink?.map((item, id) => {
               return <>
                 <div key={item.id} className="bg-gradient-to-r from-cyan-500 to-blue-500 col-span-2 rounded-lg shadow-md p-6">
@@ -140,11 +151,11 @@ const Result = () => {
                       Start URL:
                     </div>
                     <div className="w-full overflow-x-hidden">
-                    <a  target="_blank" href={item.startUrl}>
-                      {item.startUrl}
-                    </a>
+                      <a target="_blank" href={item.startUrl}>
+                        {item.startUrl}
+                      </a>
                     </div>
-                   
+
                   </div>
                   <div>
                     <div className="flex items-center text-gray-700 font-bold mb-2">
@@ -156,6 +167,41 @@ const Result = () => {
                 </div>
               </>
             })}
+          </div> */}
+          <div className="my-5 container grid grid-cols-4 gap-5 mx-auto px-4 py-8">
+            {meetingLink?.map((meeting, index) => (
+              <div
+                key={index}
+                className={`bg-gradient-to-r ${gradientColors[index % gradientColors.length]} col-span-2 rounded-lg shadow-md p-6`}
+              >
+                <div className="flex items-center mb-4">
+                  <h2 className="text-3xl text-white font-bold mr-2">{meeting.title}</h2>
+                  {meeting.type === "link" && <FiLink className="text-white text-2xl" />}
+                  {meeting.type === "video" && <FiVideo className="text-white text-2xl" />}
+                  {meeting.type === "clock" && <FiClock className="text-white text-2xl" />}
+                </div>
+                <div className="mb-6">
+                  <div className="flex items-center text-gray-700 font-bold mb-2">
+                    {meeting.type === "link" && <FiLink className="mr-2" />}
+                    {meeting.type === "video" && <FiVideo className="mr-2" />}
+                    {meeting.type === "clock" && <FiClock className="mr-2" />}
+                  </div>
+                  <div className="w-[100%]">
+                    <a className="block overflow-x-hidden" target="_blank" href={meeting.startUrl}>
+                      {meeting.startUrl}
+                    </a>
+                  </div>
+
+                </div>
+                <div>
+                  <div className="flex items-center text-gray-700 font-bold mb-2">
+                    <FiLock className="mr-2" />
+                    Password:
+                  </div>
+                  <p className="text-gray-900">{meeting.password}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
