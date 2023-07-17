@@ -85,7 +85,21 @@ const NavBar = () => {
                       </div>
                       <div>
                         <span onClick={() => {}} className="text-md">
-                          Assignemt
+                          Upload Assignemt
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </Link>
+                <Link href="/assignmentLIst">
+                  <li className="p-4   hover:text-yellow-600 duration-200 cursor-pointer active">
+                    <div className="flex justify-start gap-4 items-center">
+                      <div>
+                        <AiOutlineWallet size={25} />
+                      </div>
+                      <div>
+                        <span onClick={() => {}} className="text-md">
+                          Assignment List
                         </span>
                       </div>
                     </div>
@@ -99,7 +113,7 @@ const NavBar = () => {
                         <BsChatLeft size={25} />
                       </div>
                       <div>
-                        <span className="text-md cursor-pointer">Message</span>
+                        <span className="text-md cursor-pointer">Send Notice</span>
                       </div>
                     </div>
                   </li>

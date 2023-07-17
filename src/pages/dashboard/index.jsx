@@ -6,25 +6,45 @@ import { GiTrophyCup } from "react-icons/gi";
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import HitMaps from "@/component/charts/HitMaps";
-
+import CreateZoomMeeting from "@/component/CreateZoomMeeting";
+import { FiLink, FiLock } from 'react-icons/fi';
 const Result = () => {
   const [profile, setProfile] = useState("");
-  const getProfile = async () => {
+  const [meetingLink, setMeetingLink] = useState();
+  const [studentPerformance, setStudentPerformance] = useState([]);
+  const [noticeBoard,setNoticeBoard] = useState([]);
+  const gradientColors = [
+    "from-pink-500 to-purple-500",
+    "from-blue-500 to-indigo-500",
+    "from-green-500 to-teal-500",
+    "from-yellow-500 to-orange-500",
+  ];
+  const fetchData = async () => {
     try {
-      const res = await api.get("/auth/users/me");
-      if (res) {
-        setProfile(res.data);
-      }
+      const [meetingRes, profileRes, studentPerformanceRes] = await Promise.all([
+        api.get("/all/teacher/meetinglist"),
+        api.get("/auth/users/me"),
+        api.get("/stats/average_reports"),
+        // api.get("/department/notification")
+      ]);
+    
+      setMeetingLink(meetingRes?.data);
+      setProfile(profileRes?.data);
+      setStudentPerformance(studentPerformanceRes?.data);
+      // setNoticeBoard(notice?.data);
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
-    getProfile();
+    fetchData();
   }, []);
+
+
   return (
     <>
-      <div className="">
+      <div className="bg-slate-100">
         <NavBar />
         <div className="ml-56  px-5">
           <div className="flex justify-between mb-5 items-center">
@@ -42,53 +62,46 @@ const Result = () => {
             </div>
             <div className="relative">
               <div className="flex items-center justify-center w-10 h-10 mx-2 overflow-hidden rounded-full">
-                <img src={profile?.avatar}/>
+                <img src={profile?.avatar} />
               </div>
               <div className="absolute bottom-0 right-0 w-4 h-4 mr-1 rounded-full bg-green-500 border-2 border-white" />
             </div>
           </div>
-          <div className="flex gap-5 items-center pt-5 ">
-            <div className="px-10 py-10 text-red-800 font-bold rounded-bl-3xl  shadow-xl bg-[conic-gradient(at_top,_var(--tw-gradient-stops))] from-orange-900 via-amber-100 to-orange-600">
-              <AiOutlineCheckCircle size={24} className="mt-[-20px] " />
-              <p className="text-3xl font-serif font-bold mb-3 pt-4 text-black">
-                {" "}
-                23
-              </p>
-              Complated Course
-            </div>
-            <div className="px-10 py-10 text-red-800 font-bold rounded-bl-3xl  shadow-xl bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-600">
+
+          <div className="flex mx-10 justify-between items-center pt-5 ">
+            <div className="px-20 py-10 text-red-800 font-bold rounded-bl-3xl  shadow bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-200 via-violet-600 to-sky-600">
               <AiFillContainer size={24} className="mt-[-20px] " />
               <p className="text-3xl font-serif font-bold pt-4 text-black mb-3">
-                4
+                10
               </p>
               Total Student's
             </div>
-
-            <div className="bg-white border-gray-200   shadow-xl p-4">
+            <div className="bg-white w-[90%] mx-10 border-gray-200   shadow p-4">
               <h2 className="font-bold font-serif text-xl">
                 Studnet Performance
               </h2>
-              <Reports height={250} width={600} />
+              <Reports studentPerformance={studentPerformance} height={250} width={600} />
             </div>
           </div>
-          <div className="flex gap-2 my-16   ">
-            <div className=" w-[45%] p-4 border border-gray-200   bg-white shadow-xl">
+
+          <div className="flex gap-2 my-16 ">
+            <div className=" w-[45%] p-4 border border-gray-200   bg-white shadow">
               <h2 className="font-bold font-serif text-xl">
                 Studnet Attendance
               </h2>
               <Attendance />
             </div>
-            <div className="w-[40%] overflow-y-auto h-52 rounded-md bg-white border-gray-200 border ">
+            <div className="w-[100%] overflow-y-auto h-52 rounded-md bg-white border-gray-200 border ">
               <h2 className="font-bold p-1 bg-red-600  text-white  font-serif text-xl">
-                Notifciation
+                Messages from Department
               </h2>
               <>
                 {/* component */}
                 {/* This is an example component */}
-                <div className="w-full">
+                <div>
                   <div
                     id="toast-default"
-                    className="flex hover:bg-slate-100 cursor-pointer  items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+                    className="flex hover:bg-slate-100 cursor-pointer  items-center p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
                     role="alert"
                   >
                     <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
@@ -106,59 +119,89 @@ const Result = () => {
                       </svg>
                     </div>
                     <div className="ml-3 text-sm font-normal">
-                      Set yourself free.
+                      Guest lacture for Teacher Tranning
                     </div>
                   </div>
                 </div>
               </>
             </div>
-            <div className="w-[60%]">
-              <div className="flex shadow-xl   border border-gray-300 flex-col  w-full items-center justify-center bg-white dark:bg-gray-800 rounded-lg ">
-                <h1 className="text-xl font-bold  bg-slate-200 w-full p-2">
-                  Student List
-                </h1>
-                <ul className="flex overflow-y-auto h-52 flex-col w-full divide-y">
-                  <li className="flex flex-row">
-                    <div className="select-none cursor-pointer hover:bg-gray-50 flex flex-1 items-center p-4">
-                      <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
-                        <a href="#" className="block relative">
-                          <img
-                            alt="profil"
-                            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&q=80"
-                            className="mx-auto object-cover rounded-full h-10 w-10"
-                          />
-                        </a>
-                      </div>
-                      <div className="flex-1 pl-1">
-                        <div className="font-medium dark:text-white">
-                          Jean Marc
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-200 text-sm">
-                          Developer
-                        </div>
-                      </div>
-                      <div className="flex flex-row justify-center">
-                        <div className="text-gray-600 dark:text-gray-200 text-xs">
-                          6:00 AM
-                        </div>
-                        <button className="w-10 text-right flex justify-end">
-                          <svg
-                            width={20}
-                            fill="currentColor"
-                            height={20}
-                            className="hover:text-gray-800 dark:hover:text-white dark:text-gray-200 text-gray-500"
-                            viewBox="0 0 1792 1792"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z" />
-                          </svg>
-                        </button>
-                      </div>
+          </div>
+          <div>
+            <CreateZoomMeeting />
+          </div>
+          {/* <div className="my-5 container grid grid-cols-4 gap-5   mx-auto px-4 py-8">
+            {meetingLink?.map((item, id) => {
+              return <>
+                <div key={item.id} className="bg-gradient-to-r from-cyan-500 to-blue-500 col-span-2 rounded-lg shadow-md p-6">
+                  <div className="flex items-center mb-4">
+                    <h2 className="text-3xl  text-white font-bold mr-2">{item.title}</h2>
+                  </div>
+                  <div className="mb-6">
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLink className="mr-2" />
+                      Join URL:
                     </div>
-                  </li>
-                </ul>
+                    <a target="_blank" href={item.joinUrl} className="text-white underline">
+                      {item.joinUrl}
+                    </a>
+                  </div>
+                  <div className="mb-6 ">
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLink className="mr-2" />
+                      Start URL:
+                    </div>
+                    <div className="w-full overflow-x-hidden">
+                      <a target="_blank" href={item.startUrl}>
+                        {item.startUrl}
+                      </a>
+                    </div>
+
+                  </div>
+                  <div>
+                    <div className="flex items-center text-gray-700 font-bold mb-2">
+                      <FiLock className="mr-2" />
+                      Password:
+                    </div>
+                    <p className="text-gray-900">{item.password}</p>
+                  </div>
+                </div>
+              </>
+            })}
+          </div> */}
+          <div className="my-5 container grid grid-cols-4 gap-5 mx-auto px-4 py-8">
+            {meetingLink?.map((meeting, index) => (
+              <div
+                key={index}
+                className={`bg-gradient-to-r ${gradientColors[index % gradientColors.length]} col-span-2 rounded-lg shadow-md p-6`}
+              >
+                <div className="flex items-center mb-4">
+                  <h2 className="text-3xl text-white font-bold mr-2">{meeting.title}</h2>
+                  {meeting.type === "link" && <FiLink className="text-white text-2xl" />}
+                  {meeting.type === "video" && <FiVideo className="text-white text-2xl" />}
+                  {meeting.type === "clock" && <FiClock className="text-white text-2xl" />}
+                </div>
+                <div className="mb-6">
+                  <div className="flex items-center text-gray-700 font-bold mb-2">
+                    {meeting.type === "link" && <FiLink className="mr-2" />}
+                    {meeting.type === "video" && <FiVideo className="mr-2" />}
+                    {meeting.type === "clock" && <FiClock className="mr-2" />}
+                  </div>
+                  <div className="w-[100%]">
+                    <a className="block overflow-x-hidden" target="_blank" href={meeting.startUrl}>
+                      {meeting.startUrl}
+                    </a>
+                  </div>
+
+                </div>
+                <div>
+                  <div className="flex items-center text-gray-700 font-bold mb-2">
+                    <FiLock className="mr-2" />
+                    Password:
+                  </div>
+                  <p className="text-gray-900">{meeting.password}</p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
