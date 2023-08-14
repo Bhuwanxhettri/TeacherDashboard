@@ -1,6 +1,7 @@
 import NavBar from "@/component/NavBar";
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
+import { message } from "antd";
 
 const Message = () => {
   const [profile, setProfile] = useState("");
@@ -27,18 +28,18 @@ const Message = () => {
 
     const notice = {
       title: title,
-      content: content,
+      body: content,
     };
 
-    axios
-      .post("/api/notices", notice)
+    api
+      .post("/teacher/notification", notice)
       .then((response) => {
-        console.log(response.data); // Handle success response
-        // Clear form fields
+        message.success("Message send Sucessfully !")
         setTitle("");
         setContent("");
       })
       .catch((error) => {
+        message.error("Message send Failed !");
         console.error(error); // Handle error response
       });
   };
